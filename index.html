@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Retroteca</title>
+  <meta name="description" content="Tu estante de juegos retro, en el navegador.">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>Retroteca</h1>
+      <p class="sub" id="count">Tu estante de juegos retro</p>
+    </div>
+    <div class="tools">
+      <input id="search" type="search" placeholder="Buscar juego…" aria-label="Buscar juego">
+      <button id="btnBios" class="ghost" title="Archivos BIOS">BIOS</button>
+      <button id="btnAdd" class="primary">+ Añadir juegos</button>
+      <input id="fileInput" type="file" multiple hidden>
+    </div>
+  </header>
+
+  <nav id="chips" class="chips" aria-label="Filtrar por consola"></nav>
+
+  <main id="shelves"></main>
+
+  <div id="empty" class="empty" hidden>
+    <div class="empty-card">
+      <h2>El estante está vacío</h2>
+      <p>Arrastra aquí tus ROMs o pulsa <b>Añadir juegos</b>. Se guardan solo en este navegador; no se sube nada a ningún servidor.</p>
+      <button id="btnAdd2" class="primary">+ Añadir juegos</button>
+    </div>
+  </div>
+
+  <div id="drop" class="drop" hidden><div>Suelta los archivos para añadirlos</div></div>
+
+  <!-- Elegir consola para archivos ambiguos -->
+  <dialog id="dlgImport">
+    <form method="dialog" id="formImport">
+      <h3>¿De qué consola es cada archivo?</h3>
+      <p class="muted">Estas extensiones sirven para varias consolas.</p>
+      <div id="importRows"></div>
+      <menu>
+        <button value="cancel" class="ghost" type="button" id="importCancel">Cancelar</button>
+        <button value="ok" class="primary" id="importOk">Añadir</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- Editar juego -->
+  <dialog id="dlgEdit">
+    <form method="dialog" id="formEdit">
+      <h3>Editar juego</h3>
+      <label>Título <input id="editTitle" required></label>
+      <label>Consola <select id="editSystem"></select></label>
+      <label>Portada
+        <span class="row">
+          <input id="editCover" type="file" accept="image/*">
+          <button type="button" id="editCoverClear" class="ghost">Quitar</button>
+        </span>
+      </label>
+      <menu>
+        <button type="button" id="editDelete" class="danger">Eliminar</button>
+        <span class="spacer"></span>
+        <button type="button" id="editCancel" class="ghost">Cancelar</button>
+        <button value="ok" class="primary">Guardar</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- BIOS -->
+  <dialog id="dlgBios">
+    <form method="dialog">
+      <h3>Archivos BIOS</h3>
+      <p class="muted">Algunas consolas los necesitan (Mega-CD, Saturn, 3DO) y otras funcionan mejor con ellos (PlayStation, DS). Súbelos de tu propia consola; no se incluyen.</p>
+      <div id="biosRows"></div>
+      <menu><span class="spacer"></span><button value="ok" class="primary">Cerrar</button></menu>
+    </form>
+  </dialog>
+
+  <script src="js/systems.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Jugando · Retroteca</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #0e0c0a; overflow: hidden; }
+    #game { width: 100vw; height: 100vh; }
+    .back {
+      position: fixed; top: max(10px, env(safe-area-inset-top)); left: 10px; z-index: 1000;
+      background: rgba(20,17,14,.72); color: #f0e9dc; text-decoration: none;
+      font: 600 13px/1 -apple-system, "Segoe UI", sans-serif; padding: 9px 14px; border-radius: 999px;
+      backdrop-filter: blur(6px);
+    }
+    .back:hover { background: #c2492f; }
+    .msg {
+      position: fixed; inset: 0; display: none; place-items: center; text-align: center; color: #f0e9dc;
+      font: 16px/1.5 -apple-system, "Segoe UI", sans-serif; padding: 24px;
+    }
+    .msg a { color: #e0654a; }
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← Estante</a>
+  <div id="game"></div>
+  <div class="msg" id="msg"></div>
+  <script src="js/systems.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/player.js"></script>
+</body>
+</html>
