@@ -36,7 +36,7 @@
 
   function render() {
     const total = games.length;
-    $('count').textContent = total ? `${total} ${total === 1 ? 'juego' : 'juegos'} en tu estante` : 'Tu estante de juegos retro';
+    $('count').textContent = total ? `${total} ${total === 1 ? 'juego cargado' : 'juegos cargados'}` : 'Emulador de consolas retro';
     emptyEl.hidden = total > 0;
 
     // chips de consola (solo las que tienen juegos)
@@ -153,7 +153,7 @@
   $('editCoverClear').onclick = () => { newCover = null; $('editCover').value = ''; toast('La portada se quitará al guardar'); };
   $('editCancel').onclick = () => $('dlgEdit').close();
   $('editDelete').onclick = async () => {
-    if (!confirm(`¿Eliminar "${editing.title}" del estante?`)) return;
+    if (!confirm(`¿Eliminar "${editing.title}" de la biblioteca?`)) return;
     await DB.deleteGame(editing.id);
     if (coverUrls.has(editing.id)) { URL.revokeObjectURL(coverUrls.get(editing.id)); coverUrls.delete(editing.id); }
     $('dlgEdit').close();
