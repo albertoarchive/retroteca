@@ -113,10 +113,9 @@ button.primary:active, button.ghost:active, button.danger:active { transform: tr
 }
 .cover-btn:active .cover { transform: translate(4px, 4px); box-shadow: 2px 2px 0 #000; }
 .cover img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; display: block; }
-/* la carátula se ve entera; el hueco se rellena con ella misma desenfocada */
-.cover.art::before {
-  content: ""; position: absolute; inset: -12px; background: var(--img) center / cover; filter: blur(12px) brightness(.7);
-}
+/* con portada: el cartucho toma exactamente la proporción de la imagen */
+.cover.art { aspect-ratio: auto; background: #000; }
+.cover.art img { height: auto; }
 .cover.gen { padding: 12px 10px 20px; display: flex; flex-direction: column; justify-content: space-between; }
 .cover.gen::before {
   content: ""; position: absolute; inset: 0;

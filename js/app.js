@@ -103,11 +103,10 @@
   function card(g, sys) {
     const el = document.createElement('div');
     el.className = 'game';
-    el.style.setProperty('--r', sys.ratio);
-    el.style.setProperty('--w', sys.w);
     const url = coverUrls.get(g.id);
+    if (!url) { el.style.setProperty('--r', sys.ratio); el.style.setProperty('--w', sys.w); } // forma por consola solo si no hay portada
     const cover = url
-      ? `<div class="cover art" style="--img:url('${url}')"><img src="${url}" alt="" loading="lazy"></div>`
+      ? `<div class="cover art"><img src="${url}" alt="" loading="lazy"></div>`
       : `<div class="cover gen" style="--c:${sys.color}"><span class="tag">${sys.short}</span><span class="t"></span></div>`;
     el.innerHTML = `
       <button class="cover-btn" aria-label="Jugar a ${g.title.replace(/"/g, '&quot;')}">${cover}</button>
