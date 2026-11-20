@@ -201,13 +201,19 @@
   $('btnBios').onclick = openBios;
   $('search').oninput = e => { query = e.target.value; render(); };
 
-  let dragDepth = 0;
-  window.addEventListener('dragenter', e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { dragDepth++; $('drop').hidden = false; } });
-  window.addEventListener('dragleave', () => { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) $('drop').hidden = true; });
-  window.addEventListener('dragover', e => e.preventDefault());
+  const dropEl = $('drop');
+  const hasFiles = e => e.dataTransfer && [...e.dataTransfer.types].includes('Files');
+  const hideDrop = () => { dropEl.hidden = true; };
+  window.addEventListener('dragover', e => { if (hasFiles(e)) { e.preventDefault(); dropEl.hidden = false; } });
+  // al salir de la ventana el navegador manda dragleave sin elemento destino
+  window.addEventListener('dragleave', e => { if (!e.relatedTarget) hideDrop(); });
+  window.addEventListener('dragend', hideDrop);
+  window.addEventListener('blur', hideDrop);
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') hideDrop(); });
+  dropEl.addEventListener('click', hideDrop);
   window.addEventListener('drop', e => {
-    e.preventDefault(); dragDepth = 0; $('drop').hidden = true;
-    if (e.dataTransfer && e.dataTransfer.files.length) importFiles(e.dataTransfer.files);
+    e.preventDefault(); hideDrop();
+    if (hasFiles(e) && e.dataTransfer.files.length) importFiles(e.dataTransfer.files);
   });
 
   load();
