@@ -32,6 +32,35 @@
       }
     }
     render();
+    autoCovers(false);
+  }
+
+  /* ---------- portadas automáticas ---------- */
+  let coversBusy = false;
+  async function autoCovers(force) {
+    if (coversBusy) return;
+    const todo = games.filter(g => !g.hasCover && (force || !g.coverTried));
+    if (!todo.length) { if (force) toast('Todos los juegos tienen portada'); return; }
+    coversBusy = true;
+    if (force) toast('Buscando portadas…');
+    let found = 0, errors = 0;
+    try {
+      for (const g of todo) {
+        const r = await Covers.find(g);
+        if (r.status === 'ok') {
+          await DB.setCover(g.id, r.blob);
+          g.hasCover = true; g.coverTried = true;
+          coverUrls.set(g.id, URL.createObjectURL(r.blob));
+          await DB.updateGame(g);
+          found++; render();
+        } else if (r.status === 'none') {
+          g.coverTried = true; await DB.updateGame(g);
+        } else errors++;
+      }
+    } finally { coversBusy = false; }
+    if (found) toast(found === 1 ? 'Portada encontrada' : `${found} portadas encontradas`);
+    else if (force && errors) toast('No se pudo conectar con la base de portadas');
+    else if (force) toast('No he encontrado portadas para esos juegos');
   }
 
   function render() {
@@ -167,7 +196,7 @@
       if (coverUrls.has(g.id)) URL.revokeObjectURL(coverUrls.get(g.id));
       coverUrls.set(g.id, URL.createObjectURL(newCover));
     } else if (newCover === null) {
-      await DB.setCover(g.id, null); g.hasCover = false;
+      await DB.setCover(g.id, null); g.hasCover = false; g.coverTried = true;
       if (coverUrls.has(g.id)) { URL.revokeObjectURL(coverUrls.get(g.id)); coverUrls.delete(g.id); }
     }
     await DB.updateGame(g);
@@ -199,6 +228,7 @@
   $('btnAdd').onclick = $('btnAdd2').onclick = () => fi.click();
   fi.onchange = () => { importFiles(fi.files); fi.value = ''; };
   $('btnBios').onclick = openBios;
+  $('btnCovers').onclick = () => autoCovers(true);
   $('search').oninput = e => { query = e.target.value; render(); };
 
   const dropEl = $('drop');
